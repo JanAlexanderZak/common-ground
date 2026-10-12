@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://common-ground.de/schemas/typed-graph-v0.1.json",
+  "title": "TypedGraph",
+  "description": "Output of common_ground.parse_dir / parse_string, serialized via to_json. v0.1 — draft.",
+  "type": "object",
+  "required": ["statements", "edges", "metadata", "derived"],
+  "additionalProperties": false,
+  "properties": {
+    "metadata": { "$ref": "#/$defs/TopicMetadata" },
+    "statements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Statement" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Edge" }
+    },
+    "derived": { "$ref": "#/$defs/Derived" }
+  },
+  "$defs": {
+    "TopicMetadata": {
+      "type": "object",
+      "required": [
+        "topic",
+        "title",
+        "language",
+        "version",
+        "contributors",
+        "license",
+        "actors_registry"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "topic": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] },
+        "language": { "type": ["string", "null"] },
+        "version": { "type": ["string", "null"] },
+        "contributors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "license": { "type": ["string", "null"] },
+        "actors_registry": { "type": ["string", "null"] }
+      }
+    },
+    "Statement": {
+      "type": "object",
+      "required": [
+        "id",
+        "layer",
+        "text",
+        "sources",
+        "endorsed_by",
+        "disputed_by",
+        "data_refs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[\\w-]+$"
+        },
+        "layer": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text": { "type": "string" },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Source" }
+        },
+        "endorsed_by": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "disputed_by": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "data_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/DataRef" }
+        }
+      }
+    },
+    "Source": {
+      "type": "object",
+      "required": [
+        "url",
+        "label",
+        "retrieved",
+        "source_type",
+        "jurisdiction"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": ["string", "null"] },
+        "label": { "type": ["string", "null"] },
+        "retrieved": { "type": ["string", "null"] },
+        "source_type": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "legal-text",
+            "gov-statistics",
+            "peer-reviewed",
+            "expert-report",
+            "news",
+            "opinion"
+          ]
+        },
+        "jurisdiction": { "type": ["string", "null"] }
+      }
+    },
+    "DataRef": {
+      "type": "object",
+      "required": ["path", "label", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" },
+        "label": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] }
+      }
+    },
+    "Edge": {
+      "type": "object",
+      "required": ["source", "target", "relation"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "relation": { "type": "string" }
+      }
+    },
+    "Derived": {
+      "description": "Pre-computed views over statements/edges, denormalized for renderer convenience. All fields are derivable from the authored data above.",
+      "type": "object",
+      "required": ["edge_pairs", "upstream_by_id"],
+      "additionalProperties": false,
+      "properties": {
+        "edge_pairs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EdgePair" }
+        },
+        "upstream_by_id": {
+          "description": "Map from statement id to the list of statement ids reachable via outgoing edges (excluding self).",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "EdgePair": {
+      "description": "One entry per unordered (source,target) pair. `relations` contains all source-to-target relations. When two opposing directed edges exist, mutual=true, inverseRelation names the first reverse relation, and inverseRelations contains all reverse relations.",
+      "type": "object",
+      "required": ["source", "target", "relation", "relations", "mutual"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "relation": { "type": "string" },
+        "relations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "mutual": { "type": "boolean" },
+        "inverseRelation": { "type": "string" },
+        "inverseRelations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

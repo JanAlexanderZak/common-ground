@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Common Ground — Argument Graph</title>
+    <meta
+      name="description"
+      content="Layered argument graph for the German debt-brake (Schuldenbremse) debate, with sourced facts, attributed actors, and versioned data."
+    />
+    <meta property="og:title" content="Common Ground — Schuldenbremse" />
+    <meta
+      property="og:description"
+      content="Layered argument graph for the German debt-brake debate, with sourced facts, attributed actors, and versioned data."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://janalexanderzak.github.io/common-ground-01/"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--
+      Plausible Analytics — register the domain at plausible.io once URL is
+      final, then uncomment:
+      <script defer data-domain="janalexanderzak.github.io/common-ground-01" src="https://plausible.io/js/script.js"></script>
+    -->
+    <link
+      rel="stylesheet"
+      href="https://esm.sh/@xyflow/react@12/dist/style.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18",
+          "react-dom/client": "https://esm.sh/react-dom@18/client",
+          "@xyflow/react": "https://esm.sh/@xyflow/react@12?deps=react@18",
+          "htm/react": "https://esm.sh/htm@3/react?deps=react@18"
+        }
+      }
+    </script>
+    <style>
+      html,
+      body,
+      #root {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.js?v=legend-fix-20260624"></script>
+  </body>
+</html>
